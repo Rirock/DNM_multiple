@@ -2,15 +2,15 @@ import os
 import csv
 import numpy as np
 
-data_path = "./logs_f"
-log_path = "./logs_f"
+data_path = "./logs"
+log_path = "./logs"
 file_names = os.listdir(data_path)
 
 # models = ["DNM_GRU_MODEL","DNM_LSTM_MODEL_8", "DNM_LSTM", "DNM_RNN_MODEL", "lstm_reg"]
 # models = [ "DNM_LSTM_MODEL_M8", "DNM_RNN_MODEL", "lstm_reg", "gru_reg", "MLP", "SVM"]
-models = ["DNM_LSTM_MODEL_M2", "DNM_LSTM_MODEL_M4", "DNM_LSTM_MODEL_M5", "DNM_LSTM_MODEL_M6", "DNM_LSTM_MODEL_M8", "DNM_LSTM_MODEL_M10", "DNM_LSTM_MODEL_M15", "DNM_LSTM_MODEL_M20"]#, "gru_reg"]
+models = ["MLP_32", "MLP_64", "DNM_Linear_M3_M20", "DNM_multiple_32_M20"]#, "gru_reg"]
 
-nameEnd = "_pred.csv"
+nameEnd = "_log.csv"
 
 folder_paths = []
 for folder in file_names:
@@ -31,27 +31,23 @@ for file_name in folder_paths:
         logDiri = os.path.join(logDir, model+nameEnd)
         # try:
         csv_r = csv.reader(open(logDiri, "r"))
-        r = [[] for _ in range(4)]
+        r = []
         mnam = len(open(logDiri, "r").readlines())
         for i, num in enumerate(csv_r):
-            nnnn = i % 4
-            r[nnnn].append(float(num[0]))
-
-        for i, rr in enumerate(r[-1]):
-            if float(rr) < 0:
-                for j in range(len(r)):
-                    del r[j][i]
-        n = np.argmin(r[0])
-        for i in range(len(r)):
-            #print(np.mean(r[i]), end=", ")
-            print(r[i][n], end=", ")
+            r.append(num)
+        r = np.array(r)
+        r = r.astype(float)
+        print("%-20s"%model, end=": \t")
+        rr = np.mean(r, axis=0)
+        for i in range(len(rr)):
+            print("%.3f"%rr[i], end=", ")
         print()
-        r_m.append(r[0][n])
 
-        # r_m.append(np.mean(r[0]))
+        r_m.append(rr[2])
         # except:
         #     print("None")
-    n = np.argmin(r_m)
+    print()
+    n = np.argmax(r_m)
     jsnum[n] += 1
     print(models[n])
     print()

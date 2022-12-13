@@ -15,7 +15,7 @@ device = torch.device('cuda:0')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--train_model", default="DNM_multiple", type=str, help="use model")
+    parser.add_argument("-m", "--train_model", default="DNM_Linear_M3", type=str, help="use model")
     parser.add_argument("-d", "--data_path", default="./Dataset/SpectEW_data.mat", type=str, help="data path")
     parser.add_argument("--hidden_size", default=32, type=int, help="hidden size")
     parser.add_argument("--DNM_M", default=20, type=int, help="DNM M")
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     # parameter
     epochs = 3000
     learning_rate = 0.001
-    BATCH_SIZE = 16
+    BATCH_SIZE = 1024
     model_save_path = "./models"
 
     # load data
@@ -74,10 +74,12 @@ if __name__ == "__main__":
     if model_name == "MLP":
         net = eval(model_name+"(input_size, hidden_size, out_size).to(device)")
         log_path = os.path.join(log_path, model_name+"_"+str(hidden_size)+"_log.csv")
-    else:
+    elif model_name == "DNM_multiple":
         net = eval(model_name+"(input_size, hidden_size, out_size, M).to(device)")
         log_path = os.path.join(log_path, model_name+"_"+str(hidden_size)+"_M"+str(M)+"_log.csv")
-
+    else:
+        net = eval(model_name+"(input_size, out_size, M, device).to(device)")
+        log_path = os.path.join(log_path, model_name+"_M"+str(M)+"_log.csv")
 
     for run in range(run_times):
         st = time.time()
@@ -112,7 +114,7 @@ if __name__ == "__main__":
         save_path = os.path.join(model_save_path, data_name+"_"+model_name+"_"+str(run)+".pth")
         torch.save(net.state_dict(), save_path)
         times.append(time.time() - st)
-        print(run+1, ' train_acc:', train_acc[run], ' train_loss:', train_loss[run], ' test_loss:', test_loss[run], ' test_acc:', test_acc[run], ' time:', times[run])
+        print(run+1, ' train_acc:', train_acc[run], ' train_loss:', train_loss[run], ' test_acc:', test_acc[run], ' test_loss:', test_loss[run], ' time:', times[run])
 
 
     log_list = [train_acc, train_loss, test_acc, test_loss, times]
