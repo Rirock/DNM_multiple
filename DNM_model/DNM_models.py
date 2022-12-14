@@ -88,3 +88,30 @@ class MLP(nn.Module):
         std = 1.0 / math.sqrt(self.hidden_size)
         for w in self.parameters():
             w.data.uniform_(-std, std)
+
+# EA
+#import math
+import numpy as np
+
+# 定义DNM
+class DNM:
+    def __init__(self, w, q, M=M, qs=qs, k=k):
+        self.M = M
+        self.qs = qs
+        self.k = k
+        self.w = w
+        self.q = q 
+    
+    def run(self, data):
+        data = data.T
+        _, j = data.shape
+        result = np.zeros([j, 1]) # [297. 1]
+        for h in range(j):
+            train_in2 = np.tile(data[:,h], (self.M, 1)).T
+            y = 1.0/(1+np.exp(-self.k*(self.w*train_in2-self.q)))
+            z = np.prod(y, 1)
+            v = sum(z)
+            result[h] = 1.0/(1+np.exp(-self.k*(v-self.qs)))
+        return result
+
+
