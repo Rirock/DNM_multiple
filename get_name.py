@@ -2,9 +2,9 @@ import os
 
 data_path = "./Dataset"
 file_names = os.listdir(data_path)
-model_name = "MLP"  #"DNM_multiple"
+model_name = "DNM_multiple"  #"DNM_multiple"
 run_times = 30
-hidden_size = 64
+hidden_size = 32
 DNM_M = 20
 
 f = open("run_"+model_name+".sh", "w", encoding="utf-8")

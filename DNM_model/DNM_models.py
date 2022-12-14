@@ -95,7 +95,7 @@ import numpy as np
 
 # 定义DNM
 class DNM:
-    def __init__(self, w, q, M=M, qs=qs, k=k):
+    def __init__(self, w, q, M=5, qs=0.1, k=0.5):
         self.M = M
         self.qs = qs
         self.k = k

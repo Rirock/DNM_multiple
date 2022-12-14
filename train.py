@@ -15,7 +15,7 @@ device = torch.device('cuda:0')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--train_model", default="DNM_Linear_M3", type=str, help="use model")
+    parser.add_argument("-m", "--train_model", default="DNM_multiple", type=str, help="use model")
     parser.add_argument("-d", "--data_path", default="./Dataset/SpectEW_data.mat", type=str, help="data path")
     parser.add_argument("--hidden_size", default=32, type=int, help="hidden size")
     parser.add_argument("--DNM_M", default=20, type=int, help="DNM M")
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     data_name = os.path.split(data_path)[-1].split(".")[0]
 
     # parameter
-    epochs = 3000
+    epochs = 5000
     learning_rate = 0.001
     BATCH_SIZE = 1024
     model_save_path = "./models"
