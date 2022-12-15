@@ -32,7 +32,7 @@ for file_name in folder_paths:
         # try:
         csv_r = csv.reader(open(logDiri, "r"))
         r = []
-        mnam = len(open(logDiri, "r").readlines())
+        #mnam = len(open(logDiri, "r").readlines())
         for i, num in enumerate(csv_r):
             r.append(num)
         r = np.array(r)
@@ -52,6 +52,18 @@ for file_name in folder_paths:
     print(models[n])
     print()
     result.append(r_m)
-    #print(r_m)
+
 print(jsnum)
-#for r in result:
+
+def get_data_by_gp(path, data_name, methods):
+    result_list = []
+    for method in methods:
+        logDiri = os.path.join(path, data_name, method+"_log.csv")
+        csv_r = csv.reader(open(logDiri, "r"))
+        r = []
+        for i, num in enumerate(csv_r):
+            r.append(num)
+        r = np.array(r).astype(float)
+        #rr = np.mean(r, axis=0)
+        result_list.append(r)
+    return(result_list)
