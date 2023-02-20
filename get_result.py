@@ -2,12 +2,13 @@ import os
 import csv
 import numpy as np
 
-data_path = "./logs"
-log_path = "./logs"
+data_path = "./logs_tanh"
+log_path = "./logs_tanh"
 file_names = os.listdir(data_path)
 
 # models = ["DNM_GRU_MODEL","DNM_LSTM_MODEL_8", "DNM_LSTM", "DNM_RNN_MODEL", "lstm_reg"]
 # models = [ "DNM_LSTM_MODEL_M8", "DNM_RNN_MODEL", "lstm_reg", "gru_reg", "MLP", "SVM"]
+#models = ["DNM_Linear_M3_M20"]
 models = ["MLP_32", "MLP_64", "DNM_Linear_M3_M20", "DNM_multiple_32_M20"]#, "gru_reg"]
 
 nameEnd = "_log.csv"

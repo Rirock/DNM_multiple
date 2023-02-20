@@ -15,7 +15,7 @@ device = torch.device('cuda:0')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--train_model", default="DNM_multiple", type=str, help="use model")
+    parser.add_argument("-m", "--train_model", default="DNM_multiple_3", type=str, help="use model")
     parser.add_argument("-d", "--data_path", default="./Dataset/SpectEW_data.mat", type=str, help="data path")
     parser.add_argument("--hidden_size", default=32, type=int, help="hidden size")
     parser.add_argument("--DNM_M", default=20, type=int, help="DNM M")
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     data_name = os.path.split(data_path)[-1].split(".")[0]
 
     # parameter
-    epochs = 5000
+    epochs = 20000
     learning_rate = 0.001
     BATCH_SIZE = 1024
     model_save_path = "./models"
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     if model_name == "MLP":
         net = eval(model_name+"(input_size, hidden_size, out_size).to(device)")
         log_path = os.path.join(log_path, model_name+"_"+str(hidden_size)+"_log.csv")
-    elif model_name == "DNM_multiple":
+    elif "DNM_multiple" in model_name:
         net = eval(model_name+"(input_size, hidden_size, out_size, M).to(device)")
         log_path = os.path.join(log_path, model_name+"_"+str(hidden_size)+"_M"+str(M)+"_log.csv")
     else:
