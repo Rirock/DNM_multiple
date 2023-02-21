@@ -49,6 +49,53 @@ class DNM_Linear_M3(nn.Module):
         for w in self.parameters():
             w.data.uniform_(-std, std)
 
+class DNM_Linear_M4(nn.Module):
+    def __init__(self, input_size, out_size, M=5, device='cpu'):
+        super(DNM_Linear_M4, self).__init__()
+
+        Synapse_W = torch.rand([out_size, M, input_size]).to(device)#.cuda() # [size_out, M, size_in]
+        Synapse_q = torch.rand([out_size, M, input_size]).to(device)#.cuda()
+        Dendritic_W = torch.rand([input_size]).to(device)
+        Dendritic_B = torch.rand([input_size]).to(device)
+        torch.nn.init.constant_(Synapse_q, 0.1)
+        k = torch.rand(1).to(device)
+        qs = torch.rand(1).to(device)
+
+        self.params = nn.ParameterDict({'Synapse_W': nn.Parameter(Synapse_W)})
+        self.params.update({'Synapse_q': nn.Parameter(Synapse_q)})
+        self.params.update({'Dendritic_W': nn.Parameter(Dendritic_W)})
+        self.params.update({'Dendritic_B': nn.Parameter(Dendritic_B)})
+        self.params.update({'k': nn.Parameter(k)})
+        self.params.update({'qs': nn.Parameter(qs)})
+        self.input_size = input_size
+
+    def forward(self, x):
+        # Synapse
+        out_size, M, _ = self.params['Synapse_W'].shape
+        x = torch.unsqueeze(x, 1)
+        x = torch.unsqueeze(x, 2)
+        x = x.repeat(1, out_size, M, 1)
+        x = torch.mul(x, self.params['Synapse_W']) - self.params['Synapse_q']
+        x = torch.sigmoid(x)
+
+        x = torch.mul(x, torch.tanh(self.params['Dendritic_W'] * x + self.params['Dendritic_B']))
+
+        # Dendritic
+        x = torch.sum(x, 3) #prod 
+        x = torch.sigmoid(x)
+
+        # Membrane
+        x = torch.sum(x, 2)
+
+        # Soma
+        x = self.params['k'] * (x - self.params['qs'])
+
+        return x
+
+    def reset_parameters(self):
+        std = 1.0 / math.sqrt(self.input_size)
+        for w in self.parameters():
+            w.data.uniform_(-std, std)
 
 
 class DNM_multiple(nn.Module):
