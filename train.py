@@ -10,12 +10,13 @@ import torch.utils.data as Data
 from sklearn.model_selection import train_test_split
 
 from DNM_model.DNM_models import *
+from IC_model import *
 
 device = torch.device('cuda:0')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--train_model", default="DNM_multiple_3", type=str, help="use model")
+    parser.add_argument("-m", "--train_model", default="ICFC", type=str, help="use model")
     parser.add_argument("-d", "--data_path", default="./Dataset/SpectEW_data.mat", type=str, help="data path")
     parser.add_argument("--hidden_size", default=32, type=int, help="hidden size")
     parser.add_argument("--DNM_M", default=20, type=int, help="DNM M")
@@ -77,6 +78,9 @@ if __name__ == "__main__":
     elif "DNM_multiple" in model_name:
         net = eval(model_name+"(input_size, hidden_size, out_size, M).to(device)")
         log_path = os.path.join(log_path, model_name+"_"+str(hidden_size)+"_M"+str(M)+"_log.csv")
+    elif "IC" in model_name:
+        net = eval(model_name+"(input_size, hidden_size, out_size).to(device)")
+        log_path = os.path.join(log_path, model_name+"_"+str(hidden_size)+"_log.csv")
     else:
         net = eval(model_name+"(input_size, out_size, M, device).to(device)")
         log_path = os.path.join(log_path, model_name+"_M"+str(M)+"_log.csv")
