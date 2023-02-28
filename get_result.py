@@ -10,7 +10,8 @@ file_names = os.listdir(data_path)
 # models = [ "DNM_LSTM_MODEL_M8", "DNM_RNN_MODEL", "lstm_reg", "gru_reg", "MLP", "SVM"]
 #models = ["DNM_Linear_M3_M20"]
 #models = ["DNM_Linear_M3_M20", "DNM_multiple_32_M20","ICFC_32"]#, "gru_reg"]
-models = ["MLP_32", "MLP_64", "DNM_multiple_32_M20","ICFC_32"]#, "gru_reg"]
+models = ["MLP_32", "MLP_64", "DNM_multiple_32_M20","ICFC_32", "KNN"]#, "gru_reg"]
+models = ["DNM_multiple_32_M12", "DNM_multiple_32_M14", "DNM_multiple_32_M16", "DNM_multiple_32_M18", "DNM_multiple_32_M20"] # "DNM_multiple_32_M2", "DNM_multiple_32_M4", 
 
 nameEnd = "_log.csv"
 
@@ -49,9 +50,13 @@ for file_name in folder_paths:
         # except:
         #     print("None")
     print()
-    n = np.argmax(r_m)
-    jsnum[n] += 1
-    print(models[n])
+    winner = np.where(r_m==np.amax(r_m))[0]
+    print(winner)
+    #n = np.argmax(r_m)
+    for n in winner:
+        jsnum[n] += 1
+        print(models[n], end=", ")
+    print()
     print()
     result.append(r_m)
 
